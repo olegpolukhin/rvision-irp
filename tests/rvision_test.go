@@ -1,44 +1,58 @@
 package tests
 
 import (
-	gorvison "github.com/olegpolukhin/rvision-irp/cmd"
-	"log"
+	"github.com/olegpolukhin/rvision-irp/cmd/server"
+	"github.com/olegpolukhin/rvision-irp/usecase"
 	"testing"
 )
 
-func NewRevisionWithTestData() *gorvison.Revision {
-	//auth := gorvison.Auth{
-	//	Username: "111",
-	//	APIToken: "222",
-	//}
-	var auth gorvison.Auth
-	return gorvison.NewRevision(&auth, "https://example")
-}
+func TestGetIncidentList(t *testing.T) {
+	revision := server.NewServer()
 
-func TestJobs(t *testing.T) {
-	Revision := NewRevisionWithTestData()
-	jobs, err := Revision.GetJobs()
+	incident := usecase.NewIncidentUsecase(revision)
+
+	list, err := incident.GetIncidentList()
 
 	if err != nil {
 		t.Errorf("error %v\n", err)
 	}
 
-	if len(jobs) == 0 {
-		t.Errorf("return no jobs\n")
+	if len(list.Incidents) == 0 {
+		t.Errorf("return no list\n")
+		return
 	}
-
-	log.Println(jobs)
 }
 
-func TestJob(t *testing.T) {
-	Revision := NewRevisionWithTestData()
-	job, err := Revision.GetJob("one")
+func TestGetIncident(t *testing.T) {
+	revision := server.NewServer()
 
+	incident := usecase.NewIncidentUsecase(revision)
+
+	list, err := incident.GetIncident("1")
 	if err != nil {
 		t.Errorf("error %v\n", err)
 	}
 
-	if len(job.Name) == 0 {
-		t.Errorf("return no job\n")
+	if len(list.Incidents) == 0 {
+		t.Errorf("return no list\n")
+		return
 	}
 }
+
+//func TestGetIncidentDB(t *testing.T) {
+//	revision := server.NewServer()
+//
+//	incident := repository.NewIncidentUsecase(revision)
+//
+//	list, err := incident.GetIncidentDB("e9de2c10-b813-4d05-bd2b-95d223802775")
+//	if err != nil {
+//		t.Errorf("error %v\n", err)
+//	}
+//
+//	if len(list.ID) == 0 {
+//		t.Errorf("return no list\n")
+//		return
+//	}
+//
+//	log.Println(list)
+//}
