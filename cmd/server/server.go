@@ -4,6 +4,7 @@ import (
 	"github.com/olegpolukhin/rvision-irp/config"
 	"github.com/olegpolukhin/rvision-irp/pkg/client"
 	"github.com/olegpolukhin/rvision-irp/pkg/datasource"
+	"github.com/spf13/viper"
 	"net/http"
 	"upper.io/db.v3/postgresql"
 )
@@ -36,17 +37,21 @@ func initApp(config *config.AppConfig) *App {
 	return &app
 }
 
-func NewServer() *App {
-	configT := config.AppConfig{}
+func NewServer(baseConfig *config.AppConfig) *App {
+	configTemp := config.AppConfig{}
 
-	configT.Postgres.Host = "127.0.0.1"
-	configT.Postgres.Database = "ex"
-	configT.Postgres.Username = "ex"
-	configT.Postgres.Password = "ex"
-	configT.Postgres.Port = 5432
+	if baseConfig == nil {
+		configTemp.Postgres.Host = viper.GetString("db_host")
+		configTemp.Postgres.Database = viper.GetString("db_name")
+		configTemp.Postgres.Username = viper.GetString("db_username")
+		configTemp.Postgres.Password = viper.GetString("db_password")
+		configTemp.Postgres.Port = viper.GetSizeInBytes("db_port")
 
-	configT.Auth = config.Auth{}
-	configT.URL = "ex"
+		configTemp.Auth = config.Auth{}
+		configTemp.URL = viper.GetString("api_url")
+	} else {
+		configTemp = *baseConfig
+	}
 
-	return initApp(&configT)
+	return initApp(&configTemp)
 }

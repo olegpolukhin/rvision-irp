@@ -24,8 +24,12 @@ func (r *RevisionApp) SetHTTPClient(client *http.Client) {
 	r.Client = client
 }
 
-func (r *RevisionApp) buildURL(path string) (requestURL string) {
-	u, _ := url.ParseRequestURI(r.BaseURL)
+func (r *RevisionApp) buildURL(path string) (requestURL string, err error) {
+	u, err := url.ParseRequestURI(r.BaseURL)
+	if err != nil {
+		return "", fmt.Errorf("(buildURL)(ParseRequestURI) Error: %w", err)
+	}
+
 	u.Path = path
 	requestURL = u.String()
 
@@ -67,7 +71,10 @@ func (r *RevisionApp) parseResponse(resp *http.Response, body interface{}) (err 
 }
 
 func (r *RevisionApp) Get(path string, params url.Values, body interface{}) error {
-	requestURL := r.buildURL(path)
+	requestURL, err := r.buildURL(path)
+	if err != nil {
+		return fmt.Errorf("(get)(buildURL) Error: %w", err)
+	}
 
 	req, err := http.NewRequest(http.MethodGet, requestURL, strings.NewReader(params.Encode()))
 	if err != nil {
@@ -93,7 +100,10 @@ func (r *RevisionApp) Get(path string, params url.Values, body interface{}) erro
 }
 
 func (r *RevisionApp) Post(path string, params map[string]string, body interface{}) error {
-	requestURL := r.buildURL(path)
+	requestURL, err := r.buildURL(path)
+	if err != nil {
+		return fmt.Errorf("(get)(buildURL) Error: %w", err)
+	}
 
 	var buf *bytes.Buffer
 

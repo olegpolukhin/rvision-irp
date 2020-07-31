@@ -1,0 +1,8 @@
+api_url: "http://1.1.1.1:5555"
+api_token: ""
+
+db_host: "127.0.0.1"
+db_name: "test"
+db_username: "test"
+db_password: "test"
+db_port: 5432

@@ -9,14 +9,16 @@ import (
 	"time"
 )
 
-const timeDelayCommon = time.Second * 20
-const timeDelayIncident = time.Second * 20
+const timeDelayCommon = time.Second * 10
+const timeDelayPingRevisionAP = time.Second * 10
+const timeDelayIncident = time.Second * 35
 
 func SchedulerRun() {
 	ctx := context.Background()
 
 	worker := scheduler.NewScheduler()
 	worker.Add(ctx, helper.EventCommon, timeDelayCommon)
+	worker.Add(ctx, helper.EventPingRevisionAPI, timeDelayPingRevisionAP)
 	worker.Add(ctx, helper.EventIncidentListToDB, timeDelayIncident)
 
 	quit := make(chan os.Signal, 1)

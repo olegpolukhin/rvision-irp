@@ -1,11 +1,17 @@
 package config
 
+import (
+	"fmt"
+	"github.com/spf13/viper"
+	"log"
+)
+
 type PostgresConf struct {
-	Host     string `toml:"host"`
-	Port     uint   `toml:"port"`
-	Database string `toml:"database"`
-	Username string `toml:"username"`
-	Password string `toml:"password"`
+	Host     string
+	Port     uint
+	Database string
+	Username string
+	Password string
 }
 
 type Auth struct {
@@ -19,20 +25,16 @@ type AppConfig struct {
 	URL      string
 }
 
-//func FromEnv() (*AppConfig, error) {
-//	var err error
-//
-//	config := AppConfig{}
-//	config.Postgres.Host = os.Getenv("POSTGRES_HOST")
-//	config.Postgres.Database = os.Getenv("POSTGRES_DATABASE")
-//	config.Postgres.Username = os.Getenv("POSTGRES_USERNAME")
-//	config.Postgres.Password = os.Getenv("POSTGRES_PASSWORD")
-//
-//	port, err := strconv.ParseUint(os.Getenv("POSTGRES_PORT"), 10, 64)
-//	if err != nil {
-//		return nil, err
-//	}
-//	config.Postgres.Port = uint(port)
-//
-//	return &config, nil
-//}
+// Init config
+func Init() {
+	viper.SetConfigName("config")         // name of config file (without extension)
+	viper.SetConfigType("yaml")           // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath("/etc/appjoin/")  // path to look for the config file in
+	viper.AddConfigPath("$HOME/.appjoin") // call multiple times to add many search paths
+	viper.AddConfigPath(".")              // optionally look for config in the working directory
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Println(fmt.Errorf("Fatal error config file: %s \n", err))
+		return
+	}
+}

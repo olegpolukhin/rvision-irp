@@ -1,6 +1,8 @@
 package helper
 
-import "context"
+import (
+	"context"
+)
 
 // EventCommon заглушка
 func EventCommon(ctx context.Context) {

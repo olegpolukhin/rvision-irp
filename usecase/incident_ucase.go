@@ -14,16 +14,16 @@ func NewIncidentUsecase(app *server.App) (helper *IncidentUsecase) {
 	return &IncidentUsecase{app.RevisionClient}
 }
 
-// GetIncidentList returns all incidents you can read.
-func (r *IncidentUsecase) GetIncidentList() (list model.IncidentList, err error) {
+// GetRvisionIncidentList returns all incidents api revision you can read.
+func (r *IncidentUsecase) RvisionIncidentList() (list model.IncidentList, err error) {
 	if err := r.app.Post("/get_incidents", nil, &list); err != nil {
 		return list, err
 	}
 	return list, nil
 }
 
-// GetIncident returns a incident which has specified id.
-func (r *IncidentUsecase) GetIncident(id string) (incident model.IncidentList, err error) {
+// RevisionIncident returns a incident api revision which has specified id.
+func (r *IncidentUsecase) RevisionIncident(id string) (incident model.IncidentList, err error) {
 	values := map[string]string{"id": id}
 	err = r.app.Post("/get_incidents", values, &incident)
 	return
