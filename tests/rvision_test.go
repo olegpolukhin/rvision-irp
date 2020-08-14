@@ -1,10 +1,11 @@
 package tests
 
 import (
+	"testing"
+
 	"github.com/olegpolukhin/rvision-irp/cmd/server"
 	"github.com/olegpolukhin/rvision-irp/config"
 	"github.com/olegpolukhin/rvision-irp/usecase"
-	"testing"
 )
 
 func serverConfigInit() *server.App {
@@ -12,12 +13,12 @@ func serverConfigInit() *server.App {
 		Postgres: config.PostgresConf{
 			Host:     "127.0.0.1",
 			Port:     5432,
-			Database: "chimney1",
-			Username: "postgres",
-			Password: "12345678",
+			Database: "",
+			Username: "",
+			Password: "",
 		},
 		Auth: config.Auth{},
-		URL:  "http://10.10.80.25:5015",
+		URL:  "",
 	})
 }
 
@@ -69,5 +70,5 @@ func TestGetIncident(t *testing.T) {
 //		return
 //	}
 //
-//	log.Println(list)
+//	log.Error(list)
 //}

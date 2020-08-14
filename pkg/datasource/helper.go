@@ -1,7 +1,7 @@
 package datasource
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 	udb "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -16,7 +16,7 @@ func executeInsertAndGetNewID(inserter sqlbuilder.Inserter) (newID string, err e
 
 func PanicOnError(err error) error {
 	if err != nil && err != udb.ErrNoMoreRows {
-		log.Println("Error: ", err)
+		log.Error("Error: ", err)
 		panic(err)
 	}
 	if err == udb.ErrNoMoreRows {

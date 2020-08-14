@@ -6,7 +6,7 @@ import (
 	"github.com/olegpolukhin/rvision-irp/domain/model"
 	"github.com/olegpolukhin/rvision-irp/repository/pgsql"
 	"github.com/olegpolukhin/rvision-irp/usecase"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -31,14 +31,14 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	revisionList, err := incidentUcase.RvisionIncidentList()
 	if err != nil {
-		log.Println("listServ Error", err)
+		log.Error("listServ Error", err)
 		return
 	}
 
 	revisionIncidentMap := make(map[int]model.Incident)
 
 	if len(revisionList.Incidents) == 0 {
-		log.Println("GetRevisionIncidentList error. List is empty")
+		log.Error("GetRevisionIncidentList error. List is empty")
 		return
 	}
 
@@ -50,7 +50,7 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	userList, err := common.UserList()
 	if err != nil {
-		log.Printf("UserList error %v\n", err)
+		log.Error("UserList error %v\n", err)
 	}
 
 	userListMap := make(map[string]string)
@@ -60,7 +60,7 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	organizationList, err := common.OrganizationList()
 	if err != nil {
-		log.Printf("OrganizationList error %v\n", err)
+		log.Error("OrganizationList error %v\n", err)
 	}
 
 	//organizationListMap := make(map[string]string)
@@ -70,17 +70,17 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	networkList, err := common.NetworkSegmentList()
 	if err != nil {
-		log.Printf("NetworkSegmentList error %v\n", err)
+		log.Error("NetworkSegmentList error %v\n", err)
 	}
 
 	szisList, err := common.SziList()
 	if err != nil {
-		log.Printf("SziList error %v\n", err)
+		log.Error("SziList error %v\n", err)
 	}
 
 	categoryList, err := common.IncidentCategoryList()
 	if err != nil {
-		log.Printf("IncidentCategoryList error %v\n", err)
+		log.Error("IncidentCategoryList error %v\n", err)
 	}
 
 	categoryListMap := make(map[string]string)
@@ -90,7 +90,7 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	priorityList, err := common.IncidentPriorityList()
 	if err != nil {
-		log.Printf("IncidentPriorityList error %v\n", err)
+		log.Error("IncidentPriorityList error %v\n", err)
 	}
 
 	priorityListMap := make(map[string]string)
@@ -100,7 +100,7 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	statusList, err := common.IncidentStatusList()
 	if err != nil {
-		log.Printf("IncidentStatusList error %v\n", err)
+		log.Error("IncidentStatusList error %v\n", err)
 	}
 
 	statusListMap := make(map[string]string)
@@ -110,7 +110,7 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	incidentTypeList, err := common.IncidentTypeList()
 	if err != nil {
-		log.Printf("IncidentTypeList error %v\n", err)
+		log.Error("IncidentTypeList error %v\n", err)
 	}
 
 	incidentTypeListMap := make(map[string]string)
@@ -122,12 +122,12 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	incidentList, err := incident.List()
 	if err != nil {
-		log.Println("incident.List error %v\n", err)
+		log.Error("incident.List error %v\n", err)
 		return
 	}
 
 	if len(incidentList) == 0 {
-		log.Println("incident.List no list")
+		log.Error("incident.List no list")
 		return
 	}
 
@@ -138,13 +138,6 @@ func EventIncidentListToDB(ctx context.Context) {
 
 	for i := range revisionList.Incidents {
 		rvision := revisionList.Incidents[i]
-
-		log.Println(1, userListMap[rvision.Owner])
-		log.Println(2, userListMap[rvision.Responsible])
-		log.Println(6, categoryListMap[rvision.IncidentType])
-		log.Println(7, priorityListMap[rvision.Level])
-		log.Println(8, statusListMap[rvision.Status])
-		log.Println(10, incidentTypeListMap[rvision.Category])
 
 		if _, ok := userListMap[rvision.Owner]; !ok {
 			userListMap[rvision.Owner] = userList[0].ID
@@ -198,7 +191,7 @@ func EventIncidentListToDB(ctx context.Context) {
 					Archived:         false,
 				})
 				if err != nil {
-					log.Printf("incident create old %v\n", err)
+					log.Error("incident create old %v\n", err)
 					return
 				}
 
@@ -226,7 +219,7 @@ func EventIncidentListToDB(ctx context.Context) {
 				Archived:         false,
 			})
 			if err != nil {
-				log.Printf("incident create new %v\n", err)
+				log.Error("incident create new %v\n", err)
 				return
 			}
 		}

@@ -1,11 +1,11 @@
 package helper
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 func handlerError(err *error) {
 	if err := recover(); err != nil {
-		log.Println("error recover:", err)
+		log.Error("error recover:", err)
 	}
 }

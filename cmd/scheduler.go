@@ -9,9 +9,9 @@ import (
 	"time"
 )
 
-const timeDelayCommon = time.Second * 10
-const timeDelayPingRevisionAP = time.Second * 10
-const timeDelayIncident = time.Second * 35
+const timeDelayCommon = time.Minute * 1
+const timeDelayPingRevisionAP = time.Second * 5
+const timeDelayIncident = time.Second * 20
 
 func SchedulerRun() {
 	ctx := context.Background()
